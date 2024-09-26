@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ModalAlert from './modais/modalAlert'; // Importa o modal que você já criou
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -7,7 +8,7 @@ const Login = () => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState('');
   const [tab, setTab] = useState('login');
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para o modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para o modal de sucesso
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -62,10 +63,10 @@ const Login = () => {
 
   const goToSignUp = () => {
     setTab('signup');
-    setEmail(''); // Limpa o campo de email
-    setSenha(''); // Limpa o campo de senha
-    setNome('');  // Limpa o campo de nome
-    setError(''); // Limpa o erro
+    setEmail(''); 
+    setSenha(''); 
+    setNome('');  
+    setError(''); 
   };
 
   const goToLogin = () => {
@@ -87,13 +88,13 @@ const Login = () => {
               <div className="flex justify-center  mt-5">
                 <button
                   onClick={goToSignUp}
-                  className={`px-4 py-2 rounded-l-md focus:outline-none transition-colors duration-300 ${tab === 'signup' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                  className={`px-4 py-2 rounded-l-md focus:outline-none transition-colors duration-300 ${tab === 'signup' ? 'bg-blue-400 text-white' : 'bg-gray-200 text-gray-700'}`}
                 >
                   Cadastrar
                 </button>
                 <button
                   onClick={goToLogin}
-                  className={`px-4 py-2 rounded-r-md focus:outline-none transition-colors duration-300 ${tab === 'login' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                  className={`px-4 py-2 rounded-r-md focus:outline-none transition-colors duration-300 ${tab === 'login' ? 'bg-blue-400 text-white' : 'bg-gray-200 text-gray-700'}`}
                 >
                   Login
                 </button>
@@ -172,22 +173,14 @@ const Login = () => {
         </div>
       </div>
 
-      {showSuccessModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">Cadastro Bem-Sucedido!</h2>
-            <p>Sua conta foi criada com sucesso.</p>
-            <div className="mt-4 flex justify-end"> {/* Alinha o botão à direita */}
-              <button
-                className="bg-cyan-500 text-white px-4 py-2 rounded"
-                onClick={closeModal}
-              >
-                Fechar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Usa o ModalAlert no lugar do modal simples */}
+      <ModalAlert
+        isOpen={showSuccessModal}
+        onClose={closeModal}
+        onConfirm={closeModal}
+        message="Sua conta foi criada com sucesso!"
+        modalType="SUCESSO"
+      />
     </div>
   );
 };
