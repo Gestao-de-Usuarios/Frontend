@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# Frontend - Sistema de Login e Gestão de Usuários
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este projeto é o frontend de um sistema de login e gestão de usuários, desenvolvido em React com Tailwind CSS. Para o funcionamento completo, o backend deve estar rodando conforme as instruções da documentação já disponível.
 
-## Available Scripts
+## Requisitos
 
-In the project directory, you can run:
+- **Node.js** (v14.x ou superior)
+- **npm** (geralmente instalado junto com o Node.js)
+- **Backend em Flask** (instruções para rodar o backend já estão no README do backend)
 
-### `npm start`
+## Passos para Rodar o Frontend
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1. Clonar o Repositório
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Clone o repositório para sua máquina local usando o seguinte comando:
 
-### `npm test`
+```bash
+git clone https://github.com/seu-usuario/seu-repositorio.git
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 2. Instalar Dependências
 
-### `npm run build`
+Acesse a pasta do frontend e instale as dependências necessárias:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd frontend
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Configurar o Tailwind CSS
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Certifique-se de que o Tailwind CSS está corretamente configurado no projeto. As dependências relacionadas já devem estar instaladas no comando anterior, mas o arquivo de configuração `tailwind.config.js` deve existir e estar corretamente configurado. Um exemplo básico seria:
 
-### `npm run eject`
+```javascript
+// tailwind.config.js
+module.exports = {
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4. Rodar o Projeto
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Para rodar o projeto em modo de desenvolvimento, execute:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+O frontend ficará acessível em `http://localhost:3000`. Certifique-se de que o backend também está rodando em `http://localhost:5000` (ou a porta configurada no backend).
 
-## Learn More
+### 5. Estrutura do Projeto
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+A estrutura do frontend é organizada da seguinte forma:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `public/`: Arquivos públicos do React.
+- `src/`: Diretório principal do código fonte.
+  - `components/`: Contém os componentes reutilizáveis.
+    - `login.jsx`: Componente da página de login.
+    - `home.jsx`: Componente da página de home, onde são gerenciados os usuários cadastrados.
+    - `modais/`: Componentes de modal para alertas de sucesso, confirmação, e erro.
 
-### Code Splitting
+### 6. Rotas
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+O projeto utiliza o **React Router** para gerenciar as rotas. As principais rotas são:
 
-### Analyzing the Bundle Size
+- `/login`: Página de login e cadastro.
+- `/home`: Página de gerenciamento de usuários (disponível após login).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 7. Variáveis de Ambiente
 
-### Making a Progressive Web App
+Se houver necessidade de modificar o endereço do backend, você pode configurar a variável de ambiente `REACT_APP_API_URL` no arquivo `.env`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+REACT_APP_API_URL=http://localhost:5000
+```
 
-### Advanced Configuration
+### 8. Testes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Atualmente, o projeto não possui testes automatizados configurados. Você pode adicionar testes com ferramentas como **Jest** e **React Testing Library**.
 
-### Deployment
+### 9. Observações
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Certifique-se de que o backend esteja rodando antes de iniciar o frontend para que as requisições funcionem corretamente.
+- Em caso de problemas, consulte os logs no console do navegador para verificar erros de rede ou de frontend.
 
-### `npm run build` fails to minify
+## Licença
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Este projeto está sob a licença MIT.
