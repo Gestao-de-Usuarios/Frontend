@@ -58,58 +58,61 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200">
-      <div className="text-center ">
-        {/* Botão de voltar */}
-        <button
-          className="absolute top-4 left-4 bg-gray-500 text-white px-4 py-2 rounded"
+    
+    <div className="min-h-screen bg-gradient-to-r from-sky-600 to-cyan-500 flex items-center justify-center p-4">
+       {/* Botão de voltar */}
+       <button
+          className="absolute top-4 left-4 bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-800 transition duration-300"
           onClick={() => setShowExitModal(true)}
         >
-          Voltar
+          X
         </button>
 
-        <h1 className="text-4xl font-bold mb-6">Página Inicial</h1>
-        <p className="text-lg mb-6">Lista de usuários cadastrados no sistema.</p>
+      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-8 relative">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800 text-center">Usuários Cadastrados</h1>
+        <p className="text-lg text-gray-600 text-center mb-8">Gerenciamento dos usuários do sistema.</p>
 
-        {error && <p className="text-red-500 mb-4">{error}</p>}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         
-        <table className="min-w-full bg-white border">
-          <thead>
-            <tr>
-              <th className="px-4 py-2 border">ID</th>
-              <th className="px-4 py-2 border">Nome</th>
-              <th className="px-4 py-2 border">Email</th>
-              <th className="px-4 py-2 border">Status</th>
-              <th className="px-4 py-2 border">Data de Criação</th>
-              <th className="px-4 py-2 border">Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users
-              .filter(user => user.status !== 'bloqueado')  // Filtra os usuários com status diferente de "bloqueado"
-              .map(user => (
-                <tr key={user.id}>
-                  <td className="px-4 py-2 border">{user.id}</td>
-                  <td className="px-4 py-2 border">{user.nome}</td>
-                  <td className="px-4 py-2 border">{user.email}</td>
-                  <td className="px-4 py-2 border">{user.status}</td>
-                  <td className="px-4 py-2 border">{user.data_criacao}</td>
-                  <td className="px-4 py-2 border">
-                    {user.status === 'ativo' ? (
-                      <button
-                        className="bg-red-500 text-white px-4 py-2 rounded"
-                        onClick={() => confirmDeleteUser(user.id)}
-                      >
-                        Excluir
-                      </button>
-                    ) : (
-                      <span className="text-gray-500">Bloqueado</span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white border-collapse border border-gray-200 rounded-lg shadow-sm">
+            <thead>
+              <tr className="bg-cyan-600  text-white">
+                <th className="px-6 py-4 text-left font-semibold">ID</th>
+                <th className="px-6 py-4 text-left font-semibold">Nome</th>
+                <th className="px-6 py-4 text-left font-semibold">Email</th>
+                <th className="px-6 py-4 text-left font-semibold">Status</th>
+                <th className="px-6 py-4 text-left font-semibold">Data de Criação</th>
+                <th className="px-6 py-4 text-center font-semibold">Ação</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {users
+                .filter(user => user.status !== 'bloqueado')  // Filtra os usuários com status diferente de "bloqueado"
+                .map(user => (
+                  <tr key={user.id} className="hover:bg-gray-50 transition duration-150">
+                    <td className="px-6 py-4 text-gray-800">{user.id}</td>
+                    <td className="px-6 py-4 text-gray-800">{user.nome}</td>
+                    <td className="px-6 py-4 text-gray-800">{user.email}</td>
+                    <td className="px-6 py-4 text-gray-800">{user.status}</td>
+                    <td className="px-6 py-4 text-gray-800">{user.data_criacao}</td>
+                    <td className="px-6 py-4 text-center">
+                      {user.status === 'ativo' ? (
+                        <button
+                          className="bg-red-400 text-white px-4 py-2 rounded-full hover:bg-red-600 transition duration-300"
+                          onClick={() => confirmDeleteUser(user.id)}
+                        >
+                          Excluir
+                        </button>
+                      ) : (
+                        <span className="text-gray-500">Bloqueado</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Modal de confirmação de exclusão */}
