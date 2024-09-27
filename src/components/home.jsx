@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Para redirecionamento
+import { useNavigate } from 'react-router-dom';
 import ModalAlert from './modais/modalAlert';
 
 const Home = () => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
-  const [showConfirmModal, setShowConfirmModal] = useState(false); // Modal de confirmação de exclusão
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Modal de sucesso após exclusão
-  const [showExitModal, setShowExitModal] = useState(false); // Modal de atenção para sair
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showExitModal, setShowExitModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null); // Armazena o usuário a ser excluído
   const navigate = useNavigate(); // Hook para navegação
 
@@ -26,29 +26,27 @@ const Home = () => {
   const deleteUser = async () => {
     try {
       const response = await fetch(`http://localhost:5000/users/${selectedUserId}/block`, {
-        method: 'POST',
+        method: 'PUT',
       });
 
       if (response.ok) {
         setUsers(users.map(user => user.id === selectedUserId ? { ...user, status: 'bloqueado' } : user));
-        setShowSuccessModal(true); // Exibe o modal de sucesso após a exclusão
+        setShowSuccessModal(true);
       } else {
         setError('Erro ao bloquear o usuário.');
       }
     } catch (err) {
       setError('Erro ao bloquear o usuário.');
     } finally {
-      setShowConfirmModal(false); // Fecha o modal de confirmação
+      setShowConfirmModal(false);
     }
   };
 
-  // Função para abrir o modal de confirmação e definir o usuário
   const confirmDeleteUser = (userId) => {
-    setSelectedUserId(userId); // Define o ID do usuário a ser excluído
-    setShowConfirmModal(true); // Abre o modal de confirmação
+    setSelectedUserId(userId); 
+    setShowConfirmModal(true); 
   };
 
-  // Função para fechar os modais
   const closeModal = () => {
     setShowConfirmModal(false);
     setShowSuccessModal(false);
@@ -65,7 +63,7 @@ const Home = () => {
         {/* Botão de voltar */}
         <button
           className="absolute top-4 left-4 bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={setShowExitModal(true)}
+          onClick={() => setShowExitModal(true)}
         >
           Voltar
         </button>
@@ -118,7 +116,7 @@ const Home = () => {
       <ModalAlert
         isOpen={showConfirmModal}
         onClose={closeModal}
-        onConfirm={deleteUser} // Função de exclusão
+        onConfirm={deleteUser}
         message={'Você tem certeza que deseja excluir este usuário?'}
         modalType="APAGAR" 
       />
@@ -136,9 +134,9 @@ const Home = () => {
       <ModalAlert
         isOpen={showExitModal}
         onClose={closeModal}
-        onConfirm={navigate('/login')} // Confirma a saída e redireciona para o login
+        onConfirm={() => navigate('/login')}
         message={'Você realmente deseja sair e voltar para a tela de login?'}
-        modalType="ALERTA" 
+        modalType="CONFIRMACAO" 
       />
     </div>
   );

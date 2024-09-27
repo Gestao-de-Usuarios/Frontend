@@ -18,6 +18,11 @@ const modalTypes = {
     defaultConfirmText: 'Confirmar',
     cancelText: null,
   },
+  CONFIRMACAO: {
+    title: 'Atenção',
+    defaultConfirmText: 'Confirmar',
+    cancelText: 'Cancelar',
+  },
 };
 
 const ModalAlert = ({
@@ -29,7 +34,8 @@ const ModalAlert = ({
   confirmText,
   children,
 }) => {
-  // Fecha o modal ao pressionar a tecla "Escape"
+
+  // Fecha o modal ao pressionar a tecla "Esc"
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -96,7 +102,7 @@ ModalAlert.propTypes = {
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,
   message: PropTypes.string,
-  modalType: PropTypes.oneOf(['APAGAR', 'ALERTA', 'SUCESSO']),
+  modalType: PropTypes.oneOf(['APAGAR', 'ALERTA', 'SUCESSO, CONFIRMACAO']),
   confirmText: PropTypes.string,
   children: PropTypes.node,
 };

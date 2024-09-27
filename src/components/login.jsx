@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ModalAlert from './modais/modalAlert'; // Importa o modal que você já criou
+import ModalAlert from './modais/modalAlert';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -8,7 +8,7 @@ const Login = () => {
   const [nome, setNome] = useState('');
   const [error, setError] = useState('');
   const [tab, setTab] = useState('login');
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para o modal de sucesso
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -30,36 +30,41 @@ const Login = () => {
     setError('');
 
     if (!validateEmail()) {
-      setError('Por favor, insira um e-mail válido.');
-      return;
+        setError('Por favor, insira um e-mail válido.');
+        return; 
     }
 
+    // Define the URL and request body based on the active tab (login/signup)
     const url = tab === 'login' ? 'http://localhost:5000/login' : 'http://localhost:5000/signup';
     const body = tab === 'login' ? { email, senha } : { nome, email, senha };
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
 
-    const data = await response.json();
-    if (response.ok) {
-      if (tab === 'signup') {
-        showModal(); 
-        setEmail(''); 
-        setSenha(''); 
-        setNome('');  
-        setError(''); 
-      } else {
-        navigate('/home');
-      }
-    } else {
-      setError(data.error);
+        const data = await response.json();
+        if (response.ok) {
+            if (tab === 'signup') {
+                showModal();
+                setEmail('');
+                setSenha('');
+                setNome('');
+            } else {
+                navigate('/home');
+            }
+        } else {
+            setError(data.error); 
+        }
+    } catch (err) {
+        setError('Ocorreu um erro ao fazer a requisição.');
     }
-  };
+};
+
 
   const goToSignUp = () => {
     setTab('signup');
