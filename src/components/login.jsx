@@ -9,7 +9,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [tab, setTab] = useState('login');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Estado para controlar a visibilidade da senha
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const validateEmail = () => {
@@ -35,7 +35,6 @@ const Login = () => {
       return;
     }
 
-    // Define a URL e o corpo da requisição com base na aba ativa (login/signup)
     const url = tab === 'login' ? 'http://localhost:5000/login' : 'http://localhost:5000/signup';
     const body = tab === 'login' ? { email, senha } : { nome, email, senha };
 
@@ -82,7 +81,6 @@ const Login = () => {
     setError('');
   };
 
-  // Função para alternar a visibilidade da senha
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -164,8 +162,8 @@ const Login = () => {
                     autoComplete="off"
                     id="password"
                     name="password"
-                    type={showPassword ? 'text' : 'password'} // Alterar o tipo do input com base no estado
-                    className="peer h-12 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-indigo-500 transition duration-300 pr-10" // Adicionado pr-10 para padding-right
+                    type={showPassword ? 'text' : 'password'}
+                    className="peer h-12 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none focus:border-indigo-500 transition duration-300 pr-10"
                     placeholder="Senha"
                     value={senha}
                     onChange={(e) => setSenha(e.target.value)}
@@ -177,7 +175,6 @@ const Login = () => {
                   >
                     Senha
                   </label>
-                  {/* Botão para alternar a visibilidade da senha */}
                   <button
                     type="button"
                     onClick={togglePasswordVisibility}
@@ -185,7 +182,6 @@ const Login = () => {
                     aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                   >
                     {showPassword ? (
-                      // Ícone de olho fechado (Ocultar senha)
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -207,7 +203,6 @@ const Login = () => {
                         />
                       </svg>
                     ) : (
-                      // Ícone de olho aberto (Mostrar senha)
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         className="h-5 w-5"
@@ -241,6 +236,48 @@ const Login = () => {
                   </button>
                 </div>
               </form>
+
+              {/* Divisor */}
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">Ou</span>
+                </div>
+              </div>
+
+              {/* Botão de Login com Google */}
+              <div className="flex justify-center">
+                <button
+                  onClick={() => window.location.href = "http://localhost:5000/login/google"}
+                  className="flex items-center justify-center w-full bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300"
+                >
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    viewBox="0 0 48 48"
+                  >
+                    <path
+                      fill="#EA4335"
+                      d="M24 9.5c3.44 0 6.58 1.17 9.07 3.31l6.76-6.76C35.52 2.49 30.02 0 24 0 14.99 0 7.26 5.48 3.74 13.38l7.78 6.04C13.07 13.46 18.19 9.5 24 9.5z"
+                    />
+                    <path
+                      fill="#4285F4"
+                      d="M46.45 24.49c0-1.56-.14-3.07-.39-4.54H24v9.13h12.69c-.55 3.01-2.2 5.57-4.73 7.28l7.55 5.85C42.47 38.09 46.45 31.77 46.45 24.49z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M13.52 29.42c-.65-1.94-1.02-4.02-1.02-6.16s.36-4.22 1.02-6.16L5.74 13.38C3.9 16.9 2.98 20.81 2.98 24.49s.92 7.59 2.76 11.11l7.78-6.18z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M24 43.98c5.81 0 10.72-1.92 14.29-5.22l-7.55-5.85c-2.09 1.41-4.76 2.23-7.74 2.23-5.81 0-10.77-3.95-12.55-9.22l-7.78 6.18C7.26 42.5 14.99 48 24 48z"
+                    />
+                    <path fill="none" d="M0 0h48v48H0z" />
+                  </svg>
+                  Continuar com o Google
+                </button>
+              </div>
             </div>
           </div>
         </div>
