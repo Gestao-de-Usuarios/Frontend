@@ -35,7 +35,7 @@ const Login = () => {
       return;
     }
 
-    const url = tab === 'login' ? 'http://localhost:5000/login' : 'http://localhost:5000/signup';
+    const url = tab === 'login' ? '/login' : '/signup';
     const body = tab === 'login' ? { email, senha } : { nome, email, senha };
 
     try {
@@ -249,7 +249,7 @@ const Login = () => {
               {/* Botões de Login Social */}
               <div className="flex justify-center space-x-4 mt-4">
                 <button
-                  onClick={() => window.location.href = "http://localhost:5000/login/google"}
+                  onClick={() => window.location.href = "/login/google"}
                   className="flex items-center justify-center bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300"
                 >
                   <svg
@@ -278,7 +278,7 @@ const Login = () => {
                 </button>
 
                 <button
-                  onClick={() => window.location.href = "http://localhost:5000/login/github"}
+                  onClick={() => window.location.href = "/login/github"}
                   className="flex items-center justify-center bg-black hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
                 >
                   <svg

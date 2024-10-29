@@ -14,7 +14,7 @@ const Home = () => {
   // Função para buscar os usuários cadastrados
   const fetchUsers = async () => {
     try {
-      const response = await fetch('http://localhost:5000/users');
+      const response = await fetch('/users');
       const data = await response.json();
       setUsers(data);
     } catch (err) {
@@ -25,7 +25,7 @@ const Home = () => {
   // Função para "excluir" (bloquear) um usuário
   const deleteUser = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/users/${selectedUserId}/block`, {
+      const response = await fetch(`/users/${selectedUserId}/block`, {
         method: 'PUT',
       });
 
