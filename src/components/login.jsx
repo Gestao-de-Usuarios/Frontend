@@ -246,15 +246,14 @@ const Login = () => {
                   <span className="px-2 bg-white text-gray-500">Ou</span>
                 </div>
               </div>
-
-              {/* Botão de Login com Google */}
-              <div className="flex justify-center">
+              {/* Botões de Login Social */}
+              <div className="flex justify-center space-x-4 mt-4">
                 <button
                   onClick={() => window.location.href = "http://localhost:5000/login/google"}
-                  className="flex items-center justify-center w-full bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300"
+                  className="flex items-center justify-center bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded-lg transition duration-300"
                 >
                   <svg
-                    className="w-5 h-5 mr-2"
+                    className="w-6 h-6 mr-2" // Aumentado para w-6 h-6
                     viewBox="0 0 48 48"
                   >
                     <path
@@ -277,11 +276,28 @@ const Login = () => {
                   </svg>
                   Continuar com o Google
                 </button>
+
+                <button
+                  onClick={() => window.location.href = "http://localhost:5000/login/github"}
+                  className="flex items-center justify-center bg-black hover:bg-gray-800 text-white font-semibold py-2 px-4 rounded-lg transition duration-300"
+                >
+                  <svg
+                    className="w-6 h-6 mr-2" // Aumentado para w-6 h-6
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M12 0C5.372 0 0 5.373 0 12a12 12 0 008.207 11.418c.6.112.793-.26.793-.577v-2.18c-3.338.725-4.042-1.607-4.042-1.607-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.082-.73.082-.73 1.205.084 1.838 1.237 1.838 1.237 1.07 1.834 2.809 1.304 3.492.997.108-.775.418-1.304.76-1.605-2.665-.303-5.467-1.333-5.467-5.932 0-1.31.468-2.38 1.235-3.22-.124-.304-.535-1.527.117-3.182 0 0 1.007-.322 3.3 1.23a11.5 11.5 0 016 0c2.292-1.552 3.298-1.23 3.298-1.23.653 1.655.242 2.878.118 3.182.769.84 1.234 1.91 1.234 3.22 0 4.61-2.807 5.625-5.479 5.921.43.372.814 1.102.814 2.222v3.293c0 .32.192.694.801.576A12.003 12.003 0 0024 12c0-6.627-5.373-12-12-12z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  Continuar com o GitHub
+                </button>
               </div>
             </div>
           </div>
         </div>
-
         {/* Modal de Sucesso */}
         <ModalAlert
           isOpen={showSuccessModal}
