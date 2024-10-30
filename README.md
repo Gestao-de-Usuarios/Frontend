@@ -26,6 +26,7 @@ Acesse a pasta do frontend e instale as dependências necessárias:
 ```bash
 cd frontend
 npm install
+npm run build
 ```
 
 ### 3. 🎨 Configurar o Tailwind CSS
@@ -49,11 +50,10 @@ module.exports = {
 
 Para rodar o projeto em modo de desenvolvimento, execute:
 
-```bash
-npm run start
-```
+Tenha certeza ter rodado o comando 'npm run build', comando feito para agora buildar o projetos e transformar o que antes eram dois projetos diferentes em um só, as rotas vão ser as mesmas.
 
-O frontend ficará acessível em `http://localhost:3000`. Certifique-se de que o backend também está rodando em `http://localhost:5000` (ou a porta configurada no backend).
+Obs: os comando de npm devem estar apenas na pasta Frontend, apos ter finalizado os ajustes tanto no back quanto no front abra a pasta que contem ambos os arquivos para poder rodar como uma aplicação inteira.
+
 
 ### 5. 📂 Estrutura do Projeto
 
@@ -64,6 +64,7 @@ A estrutura do frontend é organizada da seguinte forma:
   - `components/`: Contém os componentes reutilizáveis.
     - `login.jsx`: Componente da página de login.
     - `home.jsx`: Componente da página de home, onde são gerenciados os usuários cadastrados.
+    - `forgot_password`: Componente de consulta de senhas perdidas.
     - `modais/`: Componentes de modal para alertas de sucesso, confirmação, e erro.
 
 ### 6. 🔀 Rotas
@@ -72,3 +73,5 @@ O projeto utiliza o **React Router** para gerenciar as rotas. As principais rota
 
 - `/login`: Página de login e cadastro.
 - `/home`: Página de gerenciamento de usuários (disponível após login).
+
+
