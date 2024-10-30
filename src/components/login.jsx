@@ -26,6 +26,11 @@ const Login = () => {
     setTab('login');
   };
 
+  // Função para navegar para a página de recuperação de senha
+  const goToForgotPassword = () => {
+    navigate('/forgot-password');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -181,6 +186,7 @@ const Login = () => {
                     className="absolute right-0 top-0 mt-3 mr-3 text-gray-600 hover:text-gray-800 focus:outline-none"
                     aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                   >
+                    {/* Ícones de mostrar/ocultar senha */}
                     {showPassword ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +232,9 @@ const Login = () => {
                     )}
                   </button>
                 </div>
+
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                
                 <div className="relative flex justify-end">
                   <button
                     type="submit"
@@ -235,6 +243,19 @@ const Login = () => {
                     {tab === 'login' ? 'Login' : 'Cadastrar'}
                   </button>
                 </div>
+
+                {/* Botão "Esqueceu a senha?" centralizado abaixo do botão de login */}
+                {tab === 'login' && (
+                  <div className="text-center mt-4">
+                    <button
+                      type="button"
+                      onClick={goToForgotPassword}
+                      className="text-sm text-indigo-600 hover:text-indigo-800 focus:outline-none"
+                    >
+                      Esqueceu a senha?
+                    </button>
+                  </div>
+                )}
               </form>
 
               {/* Divisor */}
