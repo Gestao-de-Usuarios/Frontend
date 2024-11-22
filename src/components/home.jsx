@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModalAlert from './modais/modalAlert';
+import {Pagination, DOTS} from './pagination';
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -9,7 +10,19 @@ const Home = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showExitModal, setShowExitModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null); // Armazena o usuário a ser excluído
+  const [currentPage, setCurrentPage] = useState(1);
+
   const navigate = useNavigate(); // Hook para navegação
+  const pageSize = 10;
+  const activatedUsers = users.filter(user => user.status !== 'bloqueado');
+  const totalCount = activatedUsers.length;
+
+  const currentPageUsers = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    return activatedUsers.slice(startIndex, endIndex);
+  }, [activatedUsers, currentPage, pageSize]);
+
 
   // Função para buscar os usuários cadastrados
   const fetchUsers = async () => {
@@ -112,6 +125,16 @@ const Home = () => {
                 ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Paginação */}
+        <div className="flex justify-center mt-8">
+          <Pagination
+            totalCount={totalCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            sublineCount={1}
+          />
         </div>
       </div>
 
