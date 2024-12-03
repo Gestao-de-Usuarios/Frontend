@@ -1,55 +1,109 @@
-import { useMemo } from "react";
-import { range } from "lodash";
+import React from "react";
 
 export const Pagination = ({
     totalCount,
     pageSize,
     currentPage,
-    siblingCount = 1
+    onPageChange,
 }) => {
+    const totalPages = Math.ceil(totalCount / pageSize);
 
-    const DOTS = '...';
+    // Função para gerar o intervalo da paginação
+    const generatePagination = () => {
+        const pages = [];
 
-    const paginationRange = useMemo(() => {
-        
-        const totalPageCount = Math.ceil(totalCount / pageSize);
-        
-        const totalPageNumbers = siblingCount + 5;
-
-        if (totalPageNumbers >= totalPageCount) {
-            return range(1, totalPageCount + 1);
+        // Adiciona a página atual e até 1 página antes e depois
+        for (
+            let i = Math.max(1, currentPage - 1);
+            i <= Math.min(totalPages, currentPage + 1);
+            i++
+        ) {
+            pages.push(i);
         }
 
+        return pages;
+    };
 
-        const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
-        const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPageCount);
+    const paginationRange = generatePagination();
 
-        const firstPageIndex = 1;
-        const lastPageIndex = totalPageCount;
-
-        const shouldShowLeftDots = leftSiblingIndex > 2;
-        const shouldShowRightDots = rightSiblingIndex < totalPageCount - 2;
-
-        if (!shouldShowLeftDots && shouldShowRightDots) {
-            let leftItemCount = 3 + 2 * siblingCount;
-            let leftRange = range(1, leftItemCount);
-
-            return [...leftRange, DOTS, totalPageCount];
+    const onPrevious = () => {
+        if (currentPage > 1) {
+            onPageChange(currentPage - 1);
         }
+    };
 
-        if (shouldShowLeftDots && !shouldShowRightDots) {
-            let rightItemCount = 3 + 2 * siblingCount;
-            let rightRange = range(totalPageCount - rightItemCount + 1, totalPageCount);
-            return [firstPageIndex, DOTS, ...rightRange];
+    const onNext = () => {
+        if (currentPage < totalPages) {
+            onPageChange(currentPage + 1);
         }
+    };
 
-        if (shouldShowLeftDots && shouldShowRightDots) {
-            let middleRange = range(leftSiblingIndex, rightSiblingIndex);
-            return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
-        }
+    const onFirst = () => onPageChange(1);
+    const onLast = () => onPageChange(totalPages);
 
-    }, [totalCount, pageSize, currentPage, siblingCount]);
-    
+    if (totalPages <= 1) return null;
 
-    return paginationRange;
+    return (
+        <ul className="pagination-container flex space-x-2 items-center">
+            {/* Botão para Primeira Página */}
+            <li>
+                <button
+                    onClick={onFirst}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                >
+                    &lt; &lt;
+                </button>
+            </li>
+            
+            {/* Botão Anterior */}
+            <li>
+                <button
+                    onClick={onPrevious}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                >
+                    &lt;
+                </button>
+            </li>
+
+            {/* Páginas */}
+            {paginationRange.map((page) => (
+                <li key={page}>
+                    <button
+                        onClick={() => onPageChange(page)}
+                        className={`px-3 py-1 rounded ${page === currentPage ? "bg-blue-500 text-white" : "bg-gray-200 hover:bg-gray-300"
+                            }`}
+                    >
+                        {page}
+                    </button>
+                </li>
+            ))}
+
+            {/* Botão Próximo */}
+            <li>
+                <button
+                    onClick={onNext}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded ${currentPage === totalPages ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                >
+                    &gt;
+                </button>
+            </li>
+            {/* Botão para Última Página */}
+            <li>
+                <button
+                    onClick={onLast}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 rounded ${currentPage === totalPages ? "bg-gray-300" : "bg-gray-200 hover:bg-gray-300"
+                        }`}
+                >
+                    &gt; &gt;
+                </button>
+            </li>
+        </ul>
+    );
 };
