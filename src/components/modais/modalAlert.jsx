@@ -1,7 +1,10 @@
 import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import '../../i18nextConfig';
+import { useTranslation } from 'react-i18next';
 
+// const {t} = useTranslation();
 const modalTypes = {
   APAGAR: {
     title: 'Exclusão',
@@ -24,6 +27,7 @@ const modalTypes = {
     cancelText: 'Cancelar',
   },
 };
+
 
 const ModalAlert = ({
   isOpen,
@@ -56,7 +60,7 @@ const ModalAlert = ({
   const { title, defaultConfirmText, cancelText } = modalTypes[modalType] || modalTypes.ERRO;
 
   const finalConfirmText = confirmText || defaultConfirmText;
-
+  
   return ReactDOM.createPortal(
     <div
       className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"

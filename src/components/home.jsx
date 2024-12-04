@@ -2,6 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModalAlert from './modais/modalAlert';
 import { Pagination } from './pagination';
+import '../i18nextConfig';
+import { useTranslation } from 'react-i18next';
+import  i18n from '../i18nextConfig';
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -11,6 +14,7 @@ const Home = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const { t } = useTranslation();
 
   const navigate = useNavigate();
   const pageSize = 10;
@@ -66,12 +70,34 @@ const Home = () => {
     setShowExitModal(false);
   };
 
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang); // Salva a escolha no localStorage
+  };
+
   useEffect(() => {
+    const savedLanguage = localStorage.getItem('language');
+    if (savedLanguage) {
+      i18n.changeLanguage(savedLanguage); // Define o idioma salvo
+    }
     fetchUsers();
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-sky-600 to-cyan-500 flex flex-col items-center p-4 relative">
+      {/* Botão de mudar idioma */}
+      <div className="absolute top-4 right-4 z-50">
+        <select
+          onChange={(e) => changeLanguage(e.target.value)}
+          defaultValue={localStorage.getItem('language') || 'pt'}
+          className="bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+        >
+          <option value="pt">{t('Português')}</option>
+          <option value="en">{t('English')}</option>
+          <option value="ru">{t('Russo')}</option>
+        </select>
+      </div>
+
       {/* Botão de sair fixo */}
       <button
         className="fixed top-4 left-4 bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-800 transition duration-300 z-50"
@@ -80,22 +106,28 @@ const Home = () => {
         X
       </button>
 
+      {/* Restante do conteúdo */}
       <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-6 relative">
-        <h1 className="text-2xl sm:text-4xl font-bold mb-6 text-gray-800 text-center">Usuários Cadastrados</h1>
-        <p className="text-base sm:text-lg text-gray-600 text-center mb-6">Gerenciamento dos usuários do sistema.</p>
+        <h1 className="text-2xl sm:text-4xl font-bold mb-6 text-gray-800 text-center">
+          {t('Usuários Cadastrados')}
+        </h1>
+        <p className="text-base sm:text-lg text-gray-600 text-center mb-6">
+          {t('Gerenciamento dos usuários do sistema.')}
+        </p>
 
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
+        {/* Tabela */}
         <div className="overflow-x-auto">
           <table className="w-full bg-white border border-gray-200 rounded-lg shadow-sm">
             <thead>
               <tr className="bg-cyan-600 text-white">
-                <th className="px-4 sm:px-6 py-3 text-left font-semibold">ID</th>
-                <th className="px-4 sm:px-6 py-3 text-left font-semibold">Nome</th>
-                <th className="px-4 sm:px-6 py-3 text-left font-semibold">Email</th>
-                <th className="px-4 sm:px-6 py-3 text-left font-semibold">Status</th>
-                <th className="px-4 sm:px-6 py-3 text-left font-semibold">Data de Criação</th>
-                <th className="px-4 sm:px-6 py-3 text-center font-semibold">Ação</th>
+                <th className="px-4 sm:px-6 py-3 text-left font-semibold">{t('ID')}</th>
+                <th className="px-4 sm:px-6 py-3 text-left font-semibold">{t('Nome')}</th>
+                <th className="px-4 sm:px-6 py-3 text-left font-semibold">{t('Email')}</th>
+                <th className="px-4 sm:px-6 py-3 text-left font-semibold">{t('Status')}</th>
+                <th className="px-4 sm:px-6 py-3 text-left font-semibold">{t('Data de Criação')}</th>
+                <th className="px-4 sm:px-6 py-3 text-center font-semibold">{t('Ação')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
@@ -112,10 +144,10 @@ const Home = () => {
                         className="bg-red-400 text-white px-3 sm:px-4 py-2 rounded-full hover:bg-red-600 transition duration-300"
                         onClick={() => confirmDeleteUser(user.id)}
                       >
-                        Excluir
+                        {t('Excluir')}
                       </button>
                     ) : (
-                      <span className="text-gray-500">Bloqueado</span>
+                      <span className="text-gray-500">{t('Bloqueado')}</span>
                     )}
                   </td>
                 </tr>
@@ -140,7 +172,7 @@ const Home = () => {
         isOpen={showConfirmModal}
         onClose={closeModal}
         onConfirm={deleteUser}
-        message={'Você tem certeza que deseja excluir este usuário?'}
+        message={t('Você tem certeza que deseja excluir este usuário?')}
         modalType="APAGAR"
       />
 
@@ -148,7 +180,7 @@ const Home = () => {
         isOpen={showSuccessModal}
         onClose={closeModal}
         onConfirm={closeModal}
-        message={'Usuário excluído com sucesso!'}
+        message={t('Usuário excluído com sucesso!')}
         modalType="SUCESSO"
       />
 
@@ -156,7 +188,7 @@ const Home = () => {
         isOpen={showExitModal}
         onClose={closeModal}
         onConfirm={() => navigate('/login')}
-        message={'Você realmente deseja sair e voltar para a tela de login?'}
+        message={t('Você realmente deseja sair e voltar para a tela de login?')}
         modalType="CONFIRMACAO"
       />
     </div>

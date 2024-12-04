@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ModalAlert from './modais/modalAlert';
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18nextConfig';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +14,7 @@ const Login = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const validateEmail = () => {
     const re = /\S+@\S+\.\S+/;
@@ -90,8 +94,25 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  const changeLanguage = (lang) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-sky-600 to-cyan-400 flex items-center justify-center p-4">
+      {/* Botão de Seleção de Idioma */}
+      <div className="absolute top-4 right-4">
+        <select
+          onChange={(e) => changeLanguage(e.target.value)}
+          className="bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+        >
+          <option value="pt">{t('Português')}</option>
+          <option value="en">{t('Inglês')}</option>
+          <option value="ru">{t('Russo')}</option>
+        </select>
+      </div>
+      {/* Restante do código */}
       <div className="relative rounded-lg w-full max-w-md p-8 sm:p-12">
         {/* Fundo Gradient Curvo */}
         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-sky-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
@@ -99,24 +120,22 @@ const Login = () => {
           <div className="max-w-md mx-auto">
             <div>
               <h1 className="text-3xl font-semibold center text-gray-800 mb-8">
-                {tab === 'login' ? 'Login' : 'Cadastro'}
+                {tab === 'login' ? t('Entrar') : t('Cadastrar')}
               </h1>
               <div className="flex justify-center mb-3">
                 <button
                   onClick={goToSignUp}
-                  className={`px-4 py-2 rounded-l-md focus:outline-none transition-colors duration-300 ${
-                    tab === 'signup' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                  className={`px-4 py-2 rounded-l-md focus:outline-none transition-colors duration-300 ${tab === 'signup' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
                 >
-                  Cadastrar
+                  {t('Cadastrar')}
                 </button>
                 <button
                   onClick={goToLogin}
-                  className={`px-6 py-2 rounded-r-lg focus:outline-none transition-colors duration-300 ${
-                    tab === 'login' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
+                  className={`px-6 py-2 rounded-r-lg focus:outline-none transition-colors duration-300 ${tab === 'login' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
                 >
-                  Login
+                  {t('Entrar')}
                 </button>
               </div>
             </div>
@@ -139,7 +158,7 @@ const Login = () => {
                       htmlFor="name"
                       className="absolute left-0 -top-4 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:text-sm"
                     >
-                      Nome Completo
+                      {t('Nome Completo')}
                     </label>
                   </div>
                 )}
@@ -159,7 +178,7 @@ const Login = () => {
                     htmlFor="email"
                     className="absolute left-0 -top-4 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:text-sm"
                   >
-                    Email
+                    {t('Email')}
                   </label>
                 </div>
                 <div className="relative">
@@ -178,7 +197,7 @@ const Login = () => {
                     htmlFor="password"
                     className="absolute left-0 -top-4 text-gray-600 text-sm transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-2 peer-focus:-top-4 peer-focus:text-indigo-600 peer-focus:text-sm"
                   >
-                    Senha
+                    {t('Senha')}
                   </label>
                   <button
                     type="button"
@@ -234,13 +253,13 @@ const Login = () => {
                 </div>
 
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-                
+
                 <div className="relative flex justify-end">
                   <button
                     type="submit"
                     className="bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-300"
                   >
-                    {tab === 'login' ? 'Login' : 'Cadastrar'}
+                    {tab === 'login' ? t('Entrar') : t('Cadastrar')}
                   </button>
                 </div>
 
@@ -252,7 +271,7 @@ const Login = () => {
                       onClick={goToForgotPassword}
                       className="text-sm text-indigo-600 hover:text-indigo-800 focus:outline-none"
                     >
-                      Esqueceu a senha?
+                      {t('Esqueceu a senha?')}
                     </button>
                   </div>
                 )}
@@ -264,7 +283,9 @@ const Login = () => {
                   <div className="w-full border-t border-gray-300"></div>
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Ou</span>
+                  <span className="px-2 bg-white text-gray-500">
+                    {t('Ou')}
+                  </span>
                 </div>
               </div>
               {/* Botões de Login Social */}
@@ -295,7 +316,7 @@ const Login = () => {
                     />
                     <path fill="none" d="M0 0h48v48H0z" />
                   </svg>
-                  Continuar com o Google
+                  {t('Continuar com o Google')}
                 </button>
 
                 <button
@@ -313,7 +334,7 @@ const Login = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                  Continuar com o GitHub
+                  {t('Continuar com o GitHub')}
                 </button>
               </div>
             </div>
@@ -324,12 +345,13 @@ const Login = () => {
           isOpen={showSuccessModal}
           onClose={closeModal}
           onConfirm={closeModal}
-          message="Sua conta foi criada com sucesso!"
+          message={t("Sua conta foi criada com sucesso!")}
           modalType="SUCESSO"
         />
       </div>
     </div>
   );
 };
+
 
 export default Login;
