@@ -35,7 +35,7 @@ const Navbar = ({ onLogout }) => {
                         <div className="flex-shrink-0 flex items-center">
                             <NavLink to="/home" className="text-xl font-bold text-cyan-600">
                                 {/* Substitua pelo seu logo ou nome da aplicação */}
-                                Gerência
+                                {t('Gerência')}
                             </NavLink>
                         </div>
                         {/* Links de Navegação (Ocultos em dispositivos móveis) */}
@@ -182,7 +182,7 @@ const Navbar = ({ onLogout }) => {
                                     aria-label={t('Selecione o idioma')}
                                 >
                                     <option value="pt">{t('Português')}</option>
-                                    <option value="en">{t('English')}</option>
+                                    <option value="en">{t('Inglês')}</option>
                                     <option value="ru">{t('Russo')}</option>
                                 </select>
                             </div>

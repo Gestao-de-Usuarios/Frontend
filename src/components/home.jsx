@@ -141,11 +141,6 @@ const Home = ({ onLogout }) => {
     setShowExitModal(false);
   };
 
-  const changeLanguage = (lang) => {
-    i18n.changeLanguage(lang);
-    localStorage.setItem('language', lang); // Salva a escolha no localStorage
-  };
-
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language');
     if (savedLanguage) {
