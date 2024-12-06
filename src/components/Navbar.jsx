@@ -1,8 +1,7 @@
-// src/components/Navbar.js
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import ModalAlert from './modais/modalAlert'; // Importar ModalAlert
+import ModalAlert from './modais/modalAlert';
 import i18n from '../i18nextConfig';
 
 const Navbar = ({ onLogout }) => {

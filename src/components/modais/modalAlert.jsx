@@ -4,31 +4,6 @@ import ReactDOM from 'react-dom';
 import '../../i18nextConfig';
 import { useTranslation } from 'react-i18next';
 
-// const {t} = useTranslation();
-const modalTypes = {
-  APAGAR: {
-    title: 'Exclusão',
-    defaultConfirmText: 'Confirmar',
-    cancelText: 'Cancelar',
-  },
-  ALERTA: {
-    title: 'Atenção',
-    defaultConfirmText: 'Confirmar',
-    cancelText: null,
-  },
-  SUCESSO: {
-    title: 'Sucesso',
-    defaultConfirmText: 'Confirmar',
-    cancelText: null,
-  },
-  CONFIRMACAO: {
-    title: 'Atenção',
-    defaultConfirmText: 'Confirmar',
-    cancelText: 'Cancelar',
-  },
-};
-
-
 const ModalAlert = ({
   isOpen,
   onClose,
@@ -38,6 +13,36 @@ const ModalAlert = ({
   confirmText,
   children,
 }) => {
+  const { t } = useTranslation();
+
+  const modalTypes = {
+    APAGAR: {
+      title: t('modal.apagar.title', 'Exclusão'),
+      defaultConfirmText: t('modal.apagar.defaultConfirmText', 'Confirmar'),
+      cancelText: t('modal.apagar.cancelText', 'Cancelar'),
+    },
+    ALERTA: {
+      title: t('modal.alerta.title', 'Atenção'),
+      defaultConfirmText: t('modal.alerta.defaultConfirmText', 'Confirmar'),
+      cancelText: null,
+    },
+    SUCESSO: {
+      title: t('modal.sucesso.title', 'Sucesso'),
+      defaultConfirmText: t('modal.sucesso.defaultConfirmText', 'Confirmar'),
+      cancelText: null,
+    },
+    CONFIRMACAO: {
+      title: t('modal.confirmacao.title', 'Atenção'),
+      defaultConfirmText: t('modal.confirmacao.defaultConfirmText', 'Confirmar'),
+      cancelText: t('modal.confirmacao.cancelText', 'Cancelar'),
+    },
+    // Caso queira um tipo ERRO padrão
+    ERRO: {
+      title: t('modal.erro.title', 'Erro'),
+      defaultConfirmText: t('modal.erro.defaultConfirmText', 'Confirmar'),
+      cancelText: t('modal.erro.cancelText', 'Cancelar'),
+    },
+  };
 
   // Fecha o modal ao pressionar a tecla "Esc"
   useEffect(() => {
@@ -57,10 +62,11 @@ const ModalAlert = ({
 
   if (!isOpen) return null;
 
+  // Obtém o tipo de modal (ou ERRO se não encontrado)
   const { title, defaultConfirmText, cancelText } = modalTypes[modalType] || modalTypes.ERRO;
 
   const finalConfirmText = confirmText || defaultConfirmText;
-  
+
   return ReactDOM.createPortal(
     <div
       className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50"
@@ -72,7 +78,7 @@ const ModalAlert = ({
           <h5 className="text-lg font-semibold text-gray-800">{title}</h5>
         </div>
         <div className="mb-4">
-          <p className="text-gray-700 font-bold">{message}</p>
+          <p className="text-gray-700 font-bold">{t(message)}</p>
           {children}
         </div>
         <div className="flex justify-end space-x-2">
@@ -106,7 +112,7 @@ ModalAlert.propTypes = {
   onClose: PropTypes.func,
   onConfirm: PropTypes.func,
   message: PropTypes.string,
-  modalType: PropTypes.oneOf(['APAGAR', 'ALERTA', 'SUCESSO, CONFIRMACAO']),
+  modalType: PropTypes.oneOf(['APAGAR', 'ALERTA', 'SUCESSO', 'CONFIRMACAO']),
   confirmText: PropTypes.string,
   children: PropTypes.node,
 };
