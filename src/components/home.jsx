@@ -4,7 +4,7 @@ import ModalAlert from './modais/modalAlert';
 import { Pagination } from './pagination';
 import '../i18nextConfig';
 import { useTranslation } from 'react-i18next';
-import  i18n from '../i18nextConfig';
+import i18n from '../i18nextConfig';
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -14,6 +14,7 @@ const Home = () => {
   const [showExitModal, setShowExitModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [userType, setUserType] = useState(''); // Tipo do usuário: admin ou comum
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -37,6 +38,19 @@ const Home = () => {
       setUsers(data);
     } catch (err) {
       setError('Erro ao carregar os usuários.');
+    }
+  };
+
+  const fetchUserType = async () => {
+    try {
+      const response = await fetch('/api/user-type'); // Backend deve fornecer essa rota
+      if (!response.ok) {
+        throw new Error('Erro ao obter o tipo de usuário');
+      }
+      const data = await response.json();
+      setUserType(data.tipo_usuario); // 'admin' ou 'comum'
+    } catch (err) {
+      setError('Erro ao obter o tipo de usuário.');
     }
   };
 
@@ -81,6 +95,7 @@ const Home = () => {
       i18n.changeLanguage(savedLanguage); // Define o idioma salvo
     }
     fetchUsers();
+    fetchUserType(); // Obtém o tipo do usuário na montagem
   }, []);
 
   return (
@@ -139,7 +154,7 @@ const Home = () => {
                   <td className="px-4 sm:px-6 py-3 text-gray-800">{user.status}</td>
                   <td className="px-4 sm:px-6 py-3 text-gray-800">{user.data_criacao}</td>
                   <td className="px-4 sm:px-6 py-3 text-center">
-                    {user.status === 'ativo' ? (
+                    {user.status === 'ativo' && userType === 'admin' ? (
                       <button
                         className="bg-red-400 text-white px-3 sm:px-4 py-2 rounded-full hover:bg-red-600 transition duration-300"
                         onClick={() => confirmDeleteUser(user.id)}
@@ -147,7 +162,7 @@ const Home = () => {
                         {t('Excluir')}
                       </button>
                     ) : (
-                      <span className="text-gray-500">{t('Bloqueado')}</span>
+                      <span className="text-gray-500">{userType === 'comum' ? t('Visualizar') : t('Bloqueado')}</span>
                     )}
                   </td>
                 </tr>
