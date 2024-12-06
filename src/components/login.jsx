@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../i18nextConfig';
 import ModalAlert from './modais/modalAlert';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18nextConfig';
@@ -64,10 +65,21 @@ const Login = () => {
           setSenha('');
           setNome('');
         } else {
-          navigate('/home');
+          // Caso de login
+          const { token, tipo_usuario } = data;
+          if (token) {
+            // Armazenar o token no localStorage
+            localStorage.setItem('token', token);
+            localStorage.setItem('tipo_usuario', tipo_usuario);
+
+            // Redirecionar para a página principal (home)
+            navigate('/home');
+          } else {
+            setError('Token não recebido do servidor.');
+          }
         }
       } else {
-        setError(data.error);
+        setError(data.error || 'Erro ao autenticar.');
       }
     } catch (err) {
       setError('Ocorreu um erro ao fazer a requisição.');

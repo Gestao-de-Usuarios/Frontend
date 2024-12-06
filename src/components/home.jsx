@@ -5,8 +5,10 @@ import { Pagination } from './pagination';
 import '../i18nextConfig';
 import { useTranslation } from 'react-i18next';
 import i18n from '../i18nextConfig';
+import Navbar from './Navbar';
 
-const Home = () => {
+
+const Home = ({ onLogout }) => {
   const [users, setUsers] = useState([]);
   const [error, setError] = useState('');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -22,15 +24,40 @@ const Home = () => {
   const activatedUsers = users.filter(user => user.status !== 'bloqueado');
   const totalCount = activatedUsers.length;
 
+  const token = localStorage.getItem('token');
+
   const currentPageUsers = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
     return activatedUsers.slice(startIndex, endIndex);
   }, [activatedUsers, currentPage, pageSize]);
 
+  const handleUnauthorized = () => {
+    // Caso não haja token ou seja inválido, redireciona para o login
+    localStorage.removeItem('token');
+    localStorage.removeItem('tipo_usuario');
+    navigate('/login');
+  };
+
   const fetchUsers = async () => {
+    if (!token) {
+      handleUnauthorized();
+      return;
+    }
+
     try {
-      const response = await fetch('/users');
+      const response = await fetch('/users', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (response.status === 401) {
+        // Token inválido ou expirado
+        handleUnauthorized();
+        return;
+      }
+
       if (!response.ok) {
         throw new Error('Erro na resposta da API');
       }
@@ -42,8 +69,24 @@ const Home = () => {
   };
 
   const fetchUserType = async () => {
+    if (!token) {
+      handleUnauthorized();
+      return;
+    }
+
     try {
-      const response = await fetch('/api/user-type'); // Backend deve fornecer essa rota
+      const response = await fetch('/api/user-type', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
+
       if (!response.ok) {
         throw new Error('Erro ao obter o tipo de usuário');
       }
@@ -55,10 +98,24 @@ const Home = () => {
   };
 
   const deleteUser = async () => {
+    if (!token) {
+      handleUnauthorized();
+      return;
+    }
+
     try {
       const response = await fetch(`/users/${selectedUserId}/block`, {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
       });
+
+      if (response.status === 401) {
+        handleUnauthorized();
+        return;
+      }
 
       if (response.ok) {
         setUsers(users.map(user => user.id === selectedUserId ? { ...user, status: 'bloqueado' } : user));
@@ -94,35 +151,24 @@ const Home = () => {
     if (savedLanguage) {
       i18n.changeLanguage(savedLanguage); // Define o idioma salvo
     }
-    fetchUsers();
-    fetchUserType(); // Obtém o tipo do usuário na montagem
+
+    // Antes de tudo, verifica se existe token. Se não, redireciona.
+    if (!token) {
+      handleUnauthorized();
+    } else {
+      fetchUsers();
+      fetchUserType();
+    }
   }, []);
+ 
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-sky-600 to-cyan-500 flex flex-col items-center p-4 relative">
-      {/* Botão de mudar idioma */}
-      <div className="absolute top-4 right-4 z-50">
-        <select
-          onChange={(e) => changeLanguage(e.target.value)}
-          defaultValue={localStorage.getItem('language') || 'pt'}
-          className="bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-700 shadow focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-        >
-          <option value="pt">{t('Português')}</option>
-          <option value="en">{t('English')}</option>
-          <option value="ru">{t('Russo')}</option>
-        </select>
-      </div>
-
-      {/* Botão de sair fixo */}
-      <button
-        className="fixed top-4 left-4 bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-800 transition duration-300 z-50"
-        onClick={() => setShowExitModal(true)}
-      >
-        X
-      </button>
+    <div className="min-h-screen bg-gradient-to-r from-sky-600 to-cyan-500 flex flex-col items-center p-4">
+      {/* Navbar */}
+      <Navbar onLogout={ onLogout} />
 
       {/* Restante do conteúdo */}
-      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-6 relative">
+      <div className="bg-white shadow-lg rounded-lg w-full max-w-4xl p-6 mt-8 relative">
         <h1 className="text-2xl sm:text-4xl font-bold mb-6 text-gray-800 text-center">
           {t('Usuários Cadastrados')}
         </h1>
@@ -199,13 +245,6 @@ const Home = () => {
         modalType="SUCESSO"
       />
 
-      <ModalAlert
-        isOpen={showExitModal}
-        onClose={closeModal}
-        onConfirm={() => navigate('/login')}
-        message={t('Você realmente deseja sair e voltar para a tela de login?')}
-        modalType="CONFIRMACAO"
-      />
     </div>
   );
 };
